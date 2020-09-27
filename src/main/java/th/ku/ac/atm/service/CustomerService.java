@@ -1,7 +1,9 @@
 package th.ku.ac.atm.service;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import th.ku.ac.atm.data.CustomerRepository;
 import th.ku.ac.atm.model.Customer;
 
 import javax.annotation.PostConstruct;
@@ -10,30 +12,29 @@ import java.util.List;
 
 @Service
 public class CustomerService {
-    private List<Customer> customerList;
+    private CustomerRepository repository;
 
-    @PostConstruct
-    public void postConstruct(){
-        this.customerList = new ArrayList<>();
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
     }
 
     public void createCustomer(Customer customer){
-        customerList.add(customer);
         String hashPin = hash(customer.getPin());
         customer.setPin(hashPin);
+        repository.save(customer);
 
     }
 
     public List<Customer> getCustomer(){
-        return new ArrayList<>(this.customerList);
+        return repository.findAll();
     }
 
     public Customer findCustomer(int id) {
-        for (Customer customer : customerList) {
-            if (customer.getId() == id)
-                return customer;
+        try{
+            return repository.findById(id);
+        } catch (EmptyResultDataAccessException e){
+            return null;
         }
-        return null;
     }
 
     public Customer checkPin(Customer inputCustomer){
