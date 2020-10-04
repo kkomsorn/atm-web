@@ -1,28 +1,27 @@
 package th.ku.ac.atm.service;
 
-import org.springframework.stereotype.Service;
 import th.ku.ac.atm.model.BankAccount;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class BankAccountService {
 
-    private List<BankAccount> bankAccountsList;
+    private RestTemplate restTemplate;
 
-    @PostConstruct
-    public void postConstruct() {
-        this.bankAccountsList = new ArrayList<>();
+    public BankAccountService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
-    public void createBankAccount(BankAccount bankAccount) {
-        bankAccountsList.add(bankAccount);
-    }
 
-    public List<BankAccount> getAccount() {
-        return new ArrayList<>(this.bankAccountsList);
+    public List<BankAccount> getCustomerBankAccounts(int customerId) {
+        String url = "http://localhost:8091/api/bankaccount/customer/" + customerId;
+        ResponseEntity<BankAccount[]> response = restTemplate.getForEntity(url, BankAccount[].class);
+        BankAccount[] accounts = response.getBody();
+        return Arrays.asList(accounts);
     }
 }
 
