@@ -4,10 +4,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import th.ku.ac.atm.model.BankAccount;
 import th.ku.ac.atm.service.BankAccountService;
 
 @Controller
+@RequestMapping("/bankaccount")
 public class BankAccountController {
 
     private BankAccountService bankAccountService;
@@ -16,16 +18,16 @@ public class BankAccountController {
         this.bankAccountService = bankAccountService;
     }
 
-    @GetMapping("/bankaccount")
+    @GetMapping
     public String getBankAccountPage(Model model) {
-        //model.addAttribute("allBankaccount", bankAccountService.getAccount());
+        model.addAttribute("bankaccounts", bankAccountService.getBankAccounts());
         return "bankaccount";
     }
+    @PostMapping
+    public String openAccount(@ModelAttribute BankAccount bankAccount, Model model) {
+        bankAccountService.openAccount(bankAccount);
+        model.addAttribute("bankaccounts",bankAccountService.getBankAccounts());
+        return "redirect:bankaccount";
+    }
 
-//    @PostMapping("/bankaccount")
-//    public String registerCustomer(@ModelAttribute BankAccount bankAccount, Model model) {
-//        bankAccountService.createBankAccount(bankAccount);
-//        model.addAttribute("allBankaccount", bankAccountService.getAccount());
-//        return "redirect:bankaccount";
-//    }
 }
