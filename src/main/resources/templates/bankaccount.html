@@ -35,13 +35,18 @@
             <th>Customer Id</th>
             <th>Type</th>
             <th>Balance</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="bankaccount : ${bankaccounts}">
+            <td th:text="${bankaccount.id}">
             <td th:text="${bankaccount.customerId}">
             <td th:text="${bankaccount.type}">
             <td th:text="${bankaccount.balance}">
+            <td>
+                <a th:href="@{/bankaccount/edit/{id}(id=${bankaccount.id})}">Edit</a>
+            </td>
         </tr>
         </tbody>
     </table>
