@@ -9,6 +9,7 @@ public class BankAccount {
         private int customerId;
         private String type;
         private double balance;
+        private double depositOrWithdraw;
 
     public int getId() {
         return id;
@@ -42,6 +43,14 @@ public class BankAccount {
         this.balance = balance;
     }
 
+    public double getDepositOrWithdraw() {
+        return depositOrWithdraw;
+    }
+
+    public void setDepositOrWithdraw(double depositOrWithdraw) {
+        this.depositOrWithdraw = depositOrWithdraw;
+    }
+
     @Override
     public String toString() {
         return "BankAccount{" +
@@ -49,6 +58,7 @@ public class BankAccount {
                 ", customerId=" + customerId +
                 ", type='" + type + '\'' +
                 ", balance=" + balance +
+                ", depositOrWithdraw=" + depositOrWithdraw +
                 '}';
     }
 }
